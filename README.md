@@ -2,6 +2,16 @@
 
 A Tree-sitter parser for the Cypher query language, based on the [Cypher Style Guide](https://opencypher.org/resources) and the [openCypher grammar](https://github.com/opencypher/openCypher/tree/master/tools/grammar). This parser is designed for syntax highlighting and editor support, such as integration with a Zed extension.
 
+> **Fork notice.** This is a fork of
+> [`pupli/tree-sitter-cypher`](https://github.com/pupli/tree-sitter-cypher) by
+> Hari Bantwal (MIT), maintained to extend coverage toward the **Neo4j 4.4
+> Community Edition** dialect. It powers the
+> [`cypher-neo4j-44`](https://github.com/TTorr3s/cypher-neo4j) Zed extension.
+> Upstream currently parses the openCypher core; constructs such as `FOREACH`,
+> `LOAD CSV`, `USING`, `PROFILE`/`EXPLAIN`, `SHOW` commands, index/constraint
+> DDL and `CALL { }` subqueries are not yet supported and are the focus of this
+> fork.
+
 ---
 
 ## Table of Contents

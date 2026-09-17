@@ -1,13 +1,16 @@
 {
-  "name": "tree-sitter-cypher",
+  "name": "tree-sitter-cypher-neo4j",
   "version": "0.1.0",
-  "description": "Cypher grammar for tree-sitter",
-  "repository": "https://github.com/pupli/tree-sitter-cypher",
+  "description": "Cypher grammar for tree-sitter, fork tuned for Neo4j 4.4 CE (used by the cypher-neo4j-44 Zed extension)",
+  "repository": "https://github.com/TTorr3s/tree-sitter-cypher-neo4j",
   "license": "MIT",
   "author": {
     "name": "Hari Bantwal",
     "email": "hpai.bantwal@gmail.com"
   },
+  "contributors": [
+    "TTorr3s (Neo4j 4.4 fork)"
+  ],
   "main": "bindings/node",
   "types": "bindings/node",
   "keywords": [
