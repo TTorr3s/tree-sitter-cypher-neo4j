@@ -149,3 +149,209 @@ FOREACH (n IN nodes(p) | SET n.marked = true)
                         (atom
                           (literal
                             (boolean_literal)))))))))))))))
+
+==================
+LOAD CSV with headers and fieldterminator
+==================
+
+LOAD CSV WITH HEADERS FROM 'file:///data.csv' AS row FIELDTERMINATOR ';'
+MERGE (p:Person {id: row.id})
+
+---
+
+(cypher
+  (statement
+    (query
+      (regular_query
+        (single_query
+          (single_part_query
+            (reading_clause
+              (load_csv
+                (expression
+                  (atom
+                    (literal
+                      (string_literal))))
+                (variable
+                  (symbolic_name
+                    (unescaped_symbolic_name)))
+                (string_literal)))
+            (updating_clause
+              (merge
+                (pattern_part
+                  (anonymous_pattern_part
+                    (pattern_element
+                      (node_pattern
+                        (variable
+                          (symbolic_name
+                            (unescaped_symbolic_name)))
+                        (node_labels
+                          (node_label
+                            (label_name
+                              (schema_name
+                                (symbolic_name
+                                  (unescaped_symbolic_name))))))
+                        (properties
+                          (map_literal
+                            (property_key_name
+                              (schema_name
+                                (symbolic_name
+                                  (unescaped_symbolic_name))))
+                            (expression
+                              (property_or_labels_expression
+                                (expression
+                                  (atom
+                                    (variable
+                                      (symbolic_name
+                                        (unescaped_symbolic_name)))))
+                                (property_lookup
+                                  (property_key_name
+                                    (schema_name
+                                      (symbolic_name
+                                        (unescaped_symbolic_name)))))))))))))))))))))
+
+==================
+USING INDEX hint
+==================
+
+MATCH (n:Person)
+USING INDEX n:Person(name)
+WHERE n.name = 'A'
+RETURN n
+
+---
+
+(cypher
+  (statement
+    (query
+      (regular_query
+        (single_query
+          (single_part_query
+            (reading_clause
+              (match
+                (pattern
+                  (pattern_part
+                    (anonymous_pattern_part
+                      (pattern_element
+                        (node_pattern
+                          (variable
+                            (symbolic_name
+                              (unescaped_symbolic_name)))
+                          (node_labels
+                            (node_label
+                              (label_name
+                                (schema_name
+                                  (symbolic_name
+                                    (unescaped_symbolic_name)))))))))))
+                (hint
+                  (using_index
+                    (variable
+                      (symbolic_name
+                        (unescaped_symbolic_name)))
+                    (node_label
+                      (label_name
+                        (schema_name
+                          (symbolic_name
+                            (unescaped_symbolic_name)))))
+                    (property_key_name
+                      (schema_name
+                        (symbolic_name
+                          (unescaped_symbolic_name))))))
+                (where
+                  (expression
+                    (comparison_expression
+                      (expression
+                        (property_or_labels_expression
+                          (expression
+                            (atom
+                              (variable
+                                (symbolic_name
+                                  (unescaped_symbolic_name)))))
+                          (property_lookup
+                            (property_key_name
+                              (schema_name
+                                (symbolic_name
+                                  (unescaped_symbolic_name)))))))
+                      (expression
+                        (atom
+                          (literal
+                            (string_literal)))))))))
+            (return
+              (projection_body
+                (projection_items
+                  (projection_item
+                    (expression
+                      (atom
+                        (variable
+                          (symbolic_name
+                            (unescaped_symbolic_name)))))))))))))))
+
+==================
+USING JOIN ON hint
+==================
+
+MATCH (a:A)-->(b:B)
+USING JOIN ON a, b
+RETURN a, b
+
+---
+
+(cypher
+  (statement
+    (query
+      (regular_query
+        (single_query
+          (single_part_query
+            (reading_clause
+              (match
+                (pattern
+                  (pattern_part
+                    (anonymous_pattern_part
+                      (pattern_element
+                        (node_pattern
+                          (variable
+                            (symbolic_name
+                              (unescaped_symbolic_name)))
+                          (node_labels
+                            (node_label
+                              (label_name
+                                (schema_name
+                                  (symbolic_name
+                                    (unescaped_symbolic_name)))))))
+                        (pattern_element_chain
+                          (relationship_pattern
+                            (dash)
+                            (dash)
+                            (right_arrow_head))
+                          (node_pattern
+                            (variable
+                              (symbolic_name
+                                (unescaped_symbolic_name)))
+                            (node_labels
+                              (node_label
+                                (label_name
+                                  (schema_name
+                                    (symbolic_name
+                                      (unescaped_symbolic_name))))))))))))
+                (hint
+                  (using_join
+                    (variable
+                      (symbolic_name
+                        (unescaped_symbolic_name)))
+                    (variable
+                      (symbolic_name
+                        (unescaped_symbolic_name)))))))
+            (return
+              (projection_body
+                (projection_items
+                  (projection_item
+                    (expression
+                      (atom
+                        (variable
+                          (symbolic_name
+                            (unescaped_symbolic_name))))))
+                  (projection_item
+                    (expression
+                      (atom
+                        (variable
+                          (symbolic_name
+                            (unescaped_symbolic_name)))))))))))))))

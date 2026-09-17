@@ -439,6 +439,29 @@
     }
   },
   {
+    "type": "hint",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "using_index",
+          "named": true
+        },
+        {
+          "type": "using_join",
+          "named": true
+        },
+        {
+          "type": "using_scan",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "id_in_coll",
     "named": true,
     "fields": {},
@@ -649,6 +672,29 @@
     }
   },
   {
+    "type": "load_csv",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "string_literal",
+          "named": true
+        },
+        {
+          "type": "variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "map_literal",
     "named": true,
     "fields": {},
@@ -675,6 +721,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "hint",
+          "named": true
+        },
         {
           "type": "pattern",
           "named": true
@@ -1289,6 +1339,10 @@
           "named": true
         },
         {
+          "type": "load_csv",
+          "named": true
+        },
+        {
           "type": "match",
           "named": true
         },
@@ -1816,6 +1870,63 @@
     }
   },
   {
+    "type": "using_index",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "node_label",
+          "named": true
+        },
+        {
+          "type": "property_key_name",
+          "named": true
+        },
+        {
+          "type": "variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "using_join",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "using_scan",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "node_label",
+          "named": true
+        },
+        {
+          "type": "variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "variable",
     "named": true,
     "fields": {},
@@ -2094,6 +2205,10 @@
     "named": false
   },
   {
+    "type": "csv",
+    "named": false
+  },
+  {
     "type": "delete",
     "named": false
   },
@@ -2154,11 +2269,23 @@
     "named": false
   },
   {
+    "type": "fieldterminator",
+    "named": false
+  },
+  {
     "type": "filter",
     "named": false
   },
   {
     "type": "foreach",
+    "named": false
+  },
+  {
+    "type": "from",
+    "named": false
+  },
+  {
+    "type": "headers",
     "named": false
   },
   {
@@ -2170,11 +2297,23 @@
     "named": false
   },
   {
+    "type": "index",
+    "named": false
+  },
+  {
     "type": "is",
     "named": false
   },
   {
+    "type": "join",
+    "named": false
+  },
+  {
     "type": "limit",
+    "named": false
+  },
+  {
+    "type": "load",
     "named": false
   },
   {
@@ -2246,6 +2385,14 @@
     "named": false
   },
   {
+    "type": "scan",
+    "named": false
+  },
+  {
+    "type": "seek",
+    "named": false
+  },
+  {
     "type": "set",
     "named": false
   },
@@ -2283,6 +2430,10 @@
   },
   {
     "type": "unwind",
+    "named": false
+  },
+  {
+    "type": "using",
     "named": false
   },
   {
