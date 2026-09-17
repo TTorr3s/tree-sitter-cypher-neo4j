@@ -1,0 +1,151 @@
+==================
+PROFILE prefix
+==================
+
+PROFILE MATCH (n:Person) RETURN n
+
+---
+
+(cypher
+  (statement
+    (query
+      (regular_query
+        (single_query
+          (single_part_query
+            (reading_clause
+              (match
+                (pattern
+                  (pattern_part
+                    (anonymous_pattern_part
+                      (pattern_element
+                        (node_pattern
+                          (variable
+                            (symbolic_name
+                              (unescaped_symbolic_name)))
+                          (node_labels
+                            (node_label
+                              (label_name
+                                (schema_name
+                                  (symbolic_name
+                                    (unescaped_symbolic_name)))))))))))))
+            (return
+              (projection_body
+                (projection_items
+                  (projection_item
+                    (expression
+                      (atom
+                        (variable
+                          (symbolic_name
+                            (unescaped_symbolic_name)))))))))))))))
+
+==================
+EXPLAIN prefix
+==================
+
+EXPLAIN MATCH (n) RETURN count(n)
+
+---
+
+(cypher
+  (statement
+    (query
+      (regular_query
+        (single_query
+          (single_part_query
+            (reading_clause
+              (match
+                (pattern
+                  (pattern_part
+                    (anonymous_pattern_part
+                      (pattern_element
+                        (node_pattern
+                          (variable
+                            (symbolic_name
+                              (unescaped_symbolic_name))))))))))
+            (return
+              (projection_body
+                (projection_items
+                  (projection_item
+                    (expression
+                      (atom
+                        (function_invocation
+                          (function_name
+                            (symbolic_name))
+                          (expression
+                            (atom
+                              (variable
+                                (symbolic_name
+                                  (unescaped_symbolic_name))))))))))))))))))
+
+==================
+FOREACH updating clause
+==================
+
+MATCH p=(a)-[*]->(b)
+FOREACH (n IN nodes(p) | SET n.marked = true)
+
+---
+
+(cypher
+  (statement
+    (query
+      (regular_query
+        (single_query
+          (single_part_query
+            (reading_clause
+              (match
+                (pattern
+                  (pattern_part
+                    (variable
+                      (symbolic_name
+                        (unescaped_symbolic_name)))
+                    (anonymous_pattern_part
+                      (pattern_element
+                        (node_pattern
+                          (variable
+                            (symbolic_name
+                              (unescaped_symbolic_name))))
+                        (pattern_element_chain
+                          (relationship_pattern
+                            (dash)
+                            (relationship_detail
+                              (range_literal))
+                            (dash)
+                            (right_arrow_head))
+                          (node_pattern
+                            (variable
+                              (symbolic_name
+                                (unescaped_symbolic_name)))))))))))
+            (updating_clause
+              (foreach
+                (variable
+                  (symbolic_name
+                    (unescaped_symbolic_name)))
+                (expression
+                  (atom
+                    (function_invocation
+                      (function_name
+                        (symbolic_name
+                          (unescaped_symbolic_name)))
+                      (expression
+                        (atom
+                          (variable
+                            (symbolic_name
+                              (unescaped_symbolic_name))))))))
+                (updating_clause
+                  (set
+                    (set_item
+                      (property_expression
+                        (atom
+                          (variable
+                            (symbolic_name
+                              (unescaped_symbolic_name))))
+                        (property_lookup
+                          (property_key_name
+                            (schema_name
+                              (symbolic_name
+                                (unescaped_symbolic_name))))))
+                      (expression
+                        (atom
+                          (literal
+                            (boolean_literal)))))))))))))))

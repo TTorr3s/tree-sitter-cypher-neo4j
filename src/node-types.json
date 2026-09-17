@@ -378,6 +378,29 @@
     }
   },
   {
+    "type": "foreach",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "updating_clause",
+          "named": true
+        },
+        {
+          "type": "variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "function_invocation",
     "named": true,
     "fields": {},
@@ -1774,6 +1797,10 @@
           "named": true
         },
         {
+          "type": "foreach",
+          "named": true
+        },
+        {
           "type": "merge",
           "named": true
         },
@@ -2111,6 +2138,10 @@
     "named": false
   },
   {
+    "type": "explain",
+    "named": false
+  },
+  {
     "type": "exponent_decimal_real",
     "named": true
   },
@@ -2124,6 +2155,10 @@
   },
   {
     "type": "filter",
+    "named": false
+  },
+  {
+    "type": "foreach",
     "named": false
   },
   {
@@ -2188,6 +2223,10 @@
   },
   {
     "type": "order",
+    "named": false
+  },
+  {
+    "type": "profile",
     "named": false
   },
   {
