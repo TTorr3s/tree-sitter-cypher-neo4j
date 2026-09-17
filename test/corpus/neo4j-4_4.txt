@@ -430,3 +430,169 @@ SHOW NODE KEY CONSTRAINTS
   (statement
     (query
       (show_command))))
+
+==================
+CREATE INDEX for node property
+==================
+
+CREATE INDEX person_name FOR (n:Person) ON (n.name)
+
+---
+
+(cypher
+  (statement
+    (query
+      (schema_command
+        (create_index
+          (symbolic_name
+            (unescaped_symbolic_name))
+          (node_pattern
+            (variable
+              (symbolic_name
+                (unescaped_symbolic_name)))
+            (node_labels
+              (node_label
+                (label_name
+                  (schema_name
+                    (symbolic_name
+                      (unescaped_symbolic_name)))))))
+          (property_expression
+            (atom
+              (variable
+                (symbolic_name
+                  (unescaped_symbolic_name))))
+            (property_lookup
+              (property_key_name
+                (schema_name
+                  (symbolic_name
+                    (unescaped_symbolic_name)))))))))))
+
+==================
+CREATE CONSTRAINT REQUIRE IS UNIQUE with IF NOT EXISTS
+==================
+
+CREATE CONSTRAINT uniq_email IF NOT EXISTS FOR (u:User) REQUIRE u.email IS UNIQUE
+
+---
+
+(cypher
+  (statement
+    (query
+      (schema_command
+        (create_constraint
+          (symbolic_name
+            (unescaped_symbolic_name))
+          (node_pattern
+            (variable
+              (symbolic_name
+                (unescaped_symbolic_name)))
+            (node_labels
+              (node_label
+                (label_name
+                  (schema_name
+                    (symbolic_name
+                      (unescaped_symbolic_name)))))))
+          (variable
+            (symbolic_name
+              (unescaped_symbolic_name)))
+          (property_lookup
+            (property_key_name
+              (schema_name
+                (symbolic_name
+                  (unescaped_symbolic_name))))))))))
+
+==================
+CREATE CONSTRAINT NODE KEY composite
+==================
+
+CREATE CONSTRAINT FOR (p:Person) REQUIRE (p.first, p.last) IS NODE KEY
+
+---
+
+(cypher
+  (statement
+    (query
+      (schema_command
+        (create_constraint
+          (node_pattern
+            (variable
+              (symbolic_name
+                (unescaped_symbolic_name)))
+            (node_labels
+              (node_label
+                (label_name
+                  (schema_name
+                    (symbolic_name
+                      (unescaped_symbolic_name)))))))
+          (variable
+            (symbolic_name
+              (unescaped_symbolic_name)))
+          (property_lookup
+            (property_key_name
+              (schema_name
+                (symbolic_name
+                  (unescaped_symbolic_name)))))
+          (variable
+            (symbolic_name
+              (unescaped_symbolic_name)))
+          (property_lookup
+            (property_key_name
+              (schema_name
+                (symbolic_name
+                  (unescaped_symbolic_name))))))))))
+
+==================
+DROP INDEX and DROP CONSTRAINT
+==================
+
+DROP INDEX person_name
+
+---
+
+(cypher
+  (statement
+    (query
+      (schema_command
+        (drop_index
+          (symbolic_name
+            (unescaped_symbolic_name)))))))
+
+==================
+Plain CREATE is still an updating clause
+==================
+
+CREATE (n:Person) RETURN n
+
+---
+
+(cypher
+  (statement
+    (query
+      (regular_query
+        (single_query
+          (single_part_query
+            (updating_clause
+              (create
+                (pattern
+                  (pattern_part
+                    (anonymous_pattern_part
+                      (pattern_element
+                        (node_pattern
+                          (variable
+                            (symbolic_name
+                              (unescaped_symbolic_name)))
+                          (node_labels
+                            (node_label
+                              (label_name
+                                (schema_name
+                                  (symbolic_name
+                                    (unescaped_symbolic_name)))))))))))))
+            (return
+              (projection_body
+                (projection_items
+                  (projection_item
+                    (expression
+                      (atom
+                        (variable
+                          (symbolic_name
+                            (unescaped_symbolic_name)))))))))))))))
