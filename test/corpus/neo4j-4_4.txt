@@ -355,3 +355,78 @@ RETURN a, b
                         (variable
                           (symbolic_name
                             (unescaped_symbolic_name)))))))))))))))
+
+==================
+SHOW INDEXES
+==================
+
+SHOW INDEXES
+
+---
+
+(cypher
+  (statement
+    (query
+      (show_command))))
+
+==================
+SHOW ALL CONSTRAINTS with YIELD and WHERE
+==================
+
+SHOW ALL CONSTRAINTS YIELD name, type WHERE name STARTS WITH 'x'
+
+---
+
+(cypher
+  (statement
+    (query
+      (show_command
+        (show_tail
+          (yield_items
+            (yield_item
+              (variable
+                (symbolic_name
+                  (unescaped_symbolic_name))))
+            (yield_item
+              (variable
+                (symbolic_name
+                  (unescaped_symbolic_name))))
+            (where
+              (expression
+                (string_list_null_predicate_expression
+                  (expression
+                    (atom
+                      (variable
+                        (symbolic_name
+                          (unescaped_symbolic_name)))))
+                  (string_predicate_expression
+                    (expression
+                      (atom
+                        (literal
+                          (string_literal))))))))))))))
+
+==================
+SHOW BUILT IN FUNCTIONS EXECUTABLE
+==================
+
+SHOW BUILT IN FUNCTIONS EXECUTABLE BY CURRENT USER
+
+---
+
+(cypher
+  (statement
+    (query
+      (show_command))))
+
+==================
+SHOW NODE KEY CONSTRAINTS
+==================
+
+SHOW NODE KEY CONSTRAINTS
+
+---
+
+(cypher
+  (statement
+    (query
+      (show_command))))
