@@ -1333,3 +1333,119 @@ RETURN extract(x IN [1, 2, 3] WHERE x > 1 | x * 2) AS xs, filter(y IN [4, 5] WHE
                     (variable
                       (symbolic_name
                         (unescaped_symbolic_name)))))))))))))
+
+==================
+Multiple statements separated by semicolons
+==================
+
+MATCH (a) RETURN a;
+CREATE (n:P {id: 1});
+SHOW INDEXES
+
+---
+
+(cypher
+  (statement
+    (query
+      (regular_query
+        (single_query
+          (single_part_query
+            (reading_clause
+              (match
+                (pattern
+                  (pattern_part
+                    (anonymous_pattern_part
+                      (pattern_element
+                        (node_pattern
+                          (variable
+                            (symbolic_name
+                              (unescaped_symbolic_name))))))))))
+            (return
+              (projection_body
+                (projection_items
+                  (projection_item
+                    (expression
+                      (atom
+                        (variable
+                          (symbolic_name
+                            (unescaped_symbolic_name))))))))))))))
+  (statement
+    (query
+      (regular_query
+        (single_query
+          (single_part_query
+            (updating_clause
+              (create
+                (pattern
+                  (pattern_part
+                    (anonymous_pattern_part
+                      (pattern_element
+                        (node_pattern
+                          (variable
+                            (symbolic_name
+                              (unescaped_symbolic_name)))
+                          (node_labels
+                            (node_label
+                              (label_name
+                                (schema_name
+                                  (symbolic_name
+                                    (unescaped_symbolic_name))))))
+                          (properties
+                            (map_literal
+                              (property_key_name
+                                (schema_name
+                                  (symbolic_name
+                                    (unescaped_symbolic_name))))
+                              (expression
+                                (atom
+                                  (literal
+                                    (number_literal
+                                      (integer_literal
+                                        (decimal_integer))))))))))))))))))))
+  (statement
+    (query
+      (show_command))))
+
+==================
+SHOW with YIELD WHERE and RETURN
+==================
+
+SHOW INDEXES YIELD name, type WHERE type = 'BTREE' RETURN name
+
+---
+
+(cypher
+  (statement
+    (query
+      (show_command
+        (show_tail
+          (yield_items
+            (yield_item
+              (variable
+                (symbolic_name
+                  (unescaped_symbolic_name))))
+            (yield_item
+              (variable
+                (symbolic_name
+                  (unescaped_symbolic_name))))
+            (where
+              (expression
+                (comparison_expression
+                  (expression
+                    (atom
+                      (variable
+                        (symbolic_name
+                          (unescaped_symbolic_name)))))
+                  (expression
+                    (atom
+                      (literal
+                        (string_literal))))))))
+          (return
+            (projection_body
+              (projection_items
+                (projection_item
+                  (expression
+                    (atom
+                      (variable
+                        (symbolic_name
+                          (unescaped_symbolic_name))))))))))))))

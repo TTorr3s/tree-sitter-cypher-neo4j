@@ -10,7 +10,7 @@ module.exports = grammar({
       $.variable_in_parens,
   ],
   rules: {
-      cypher: ($) => seq($.statement, optional(';')),
+      cypher: ($) => seq($.statement, repeat(seq(';', $.statement)), optional(';')),
       statement: ($) => seq(optional(choice(word('profile'), word('explain'))), $.query),
       query: $ => choice($.regular_query, $.standalone_call, $.show_command, $.schema_command),
       regular_query: ($) => seq($.single_query, repeat($.union)),
@@ -50,7 +50,7 @@ module.exports = grammar({
       _show_modifier: () => choice(word('all'), word('btree'), word('fulltext'), word('lookup'), word('range'), word('text'), word('point'), word('unique'), word('node'), word('relationship'), word('rel'), word('key'), word('property'), word('exist'), word('exists'), word('existence'), word('built'), word('in'), word('user'), word('defined'), word('populated')),
       _show_object: () => choice(word('indexes'), word('index'), word('constraints'), word('constraint'), word('functions'), word('function'), word('procedures'), word('procedure'), word('databases'), word('transactions'), word('transaction')),
       _executable: ($) => seq(word('executable'), optional(seq(word('by'), choice(seq(word('current'), word('user')), $.symbolic_name)))),
-      show_tail: ($) => choice(word('brief'), seq(word('verbose'), optional(word('output'))), seq(word('yield'), $.yield_items), $.where),
+      show_tail: ($) => choice(word('brief'), seq(word('verbose'), optional(word('output'))), seq(word('yield'), $.yield_items, optional($.order), optional($.skip), optional($.limit), optional($.return)), $.where),
       schema_command: ($) => choice($.create_index, $.drop_index, $.create_constraint, $.drop_constraint),
       create_index: ($) => seq(word('create'), optional(choice(word('btree'), word('range'), word('text'), word('point'))), choice(word('index'), word('indexes')), optional($.symbolic_name), optional($._if_not_exists), word('for'), $._schema_pattern, word('on'), '(', $.property_expression, repeat(seq(',', $.property_expression)), ')'),
       drop_index: ($) => seq(word('drop'), choice(word('index'), word('indexes')), choice(seq($.symbolic_name, optional($._if_exists)), seq(word('on'), $.node_label, '(', $.property_key_name, repeat(seq(',', $.property_key_name)), ')'))),
