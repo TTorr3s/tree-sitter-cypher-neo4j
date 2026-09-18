@@ -4,13 +4,17 @@ module.exports = grammar({
   conflicts: ($) => [
       [$.map_projection, $.map_literal],
       [$.map_projection_element, $.map_literal],
+      [$.function_name, $.variable],
+      [$.reading_clause, $.updating_clause],
   ],
   inline: ($) => [
       $.namespace,
       $.variable_in_parens,
   ],
   rules: {
-      cypher: ($) => seq($.statement, repeat(seq(';', $.statement)), optional(';')),
+      // Accept an empty (or comment/whitespace-only) document: new and unsaved
+      // files are common in an editor and should not surface a syntax error.
+      cypher: ($) => optional(seq($.statement, repeat(seq(';', $.statement)), optional(';'))),
       statement: ($) => seq(optional(choice(word('profile'), word('explain'))), $.query),
       query: $ => choice($.regular_query, $.standalone_call, $.show_command, $.schema_command),
       regular_query: ($) => seq($.single_query, repeat($.union)),
@@ -19,7 +23,10 @@ module.exports = grammar({
       single_part_query: ($) => choice(seq(repeat($.reading_clause), $.return), seq(repeat($.reading_clause), repeat1($.updating_clause), optional($.return))),
       multi_part_query: ($) => seq(repeat1(seq(repeat($.reading_clause), repeat($.updating_clause), $.with)), $.single_part_query),
       updating_clause: ($) => choice($.create, $.merge, $.delete, $.set, $.remove, $.foreach, $.call_subquery),
-      reading_clause: ($) => choice($.match, $.unwind, $.in_query_call, $.load_csv),
+      // Neo4j 4.4 allows a CALL { } subquery in reading position (e.g. followed
+      // by a MATCH), not only as a standalone updating clause; it is accepted in
+      // both, disambiguated by a declared GLR conflict.
+      reading_clause: ($) => choice($.match, $.unwind, $.in_query_call, $.load_csv, $.call_subquery),
       load_csv: ($) => seq(word('load'), word('csv'), optional(seq(word('with'), word('headers'))), word('from'), $.expression, word('as'), $.variable, optional(seq(word('fieldterminator'), $.string_literal))),
       match: ($) => seq(optional(word('optional')), word('match'), $.pattern, repeat($.hint), optional($.where)),
       hint: ($) => choice($.using_index, $.using_scan, $.using_join),
@@ -103,7 +110,7 @@ module.exports = grammar({
       xor_expression: ($) => prec.left(2, seq($.expression, word('xor'), $.expression)),
       and_expression: ($) => prec.left(3, seq($.expression, word('and'), $.expression)),
       not_expression: ($) => prec(4, seq(word('not'), $.expression)),
-      comparison_expression: ($) => prec.left(5, seq($.expression, seq(choice('=', '<>', '<', '>', '<=', '>='), $.expression))),
+      comparison_expression: ($) => prec.left(5, seq($.expression, seq(choice('=', '<>', '<', '>', '<=', '>=', '=~'), $.expression))),
       string_list_null_predicate_expression: ($) => prec(6, seq($.expression, choice($.list_predicate_expression, $.string_predicate_expression, $.null_predicate_expression))),
       list_predicate_expression: ($) => prec.left(6, seq(word('in'), $.expression)),
       string_predicate_expression: ($) => prec.left(6, seq(choice(seq(word('starts'), word('with')), seq(word('ends'), word('with')), seq(word('contains'))), $.expression)),
@@ -131,8 +138,15 @@ module.exports = grammar({
       filter_expression: ($) => seq($.id_in_coll, optional($.where)),
       id_in_coll: ($) => prec(1, seq($.variable, word('in'), $.expression)),
       function_invocation: ($) => seq($.function_name, '(', optional(word('distinct')), optional(seq($.expression, repeat(seq(',', $.expression)))), ')'),
-      function_name: ($) => seq(optional($.namespace), $.symbolic_name),
-      existential_subquery: ($) => seq(word('exists'), choice(seq('{', choice($.regular_query, seq($.pattern, optional($.where))), '}'), seq('(', $.expression, ')'))),
+      // A function name is a (possibly namespaced) dotted identifier. It reuses
+      // property_lookup for the dotted tail so that a name like `apoc.coll.sum`
+      // shares its concrete structure with a property-lookup chain; the two are
+      // then disambiguated by the trailing `(` via a declared GLR conflict.
+      function_name: ($) => seq($.symbolic_name, repeat($.property_lookup)),
+      existential_subquery: ($) => seq(word('exists'), choice(seq('{', $._exists_body, '}'), seq('(', $.expression, ')'))),
+      // Neo4j 4.4 allows an EXISTS { } body to be a full query, a MATCH-led
+      // reading block without a trailing RETURN, or a bare pattern (+ WHERE).
+      _exists_body: ($) => choice($.regular_query, repeat1($.reading_clause), seq($.pattern, optional($.where))),
       explicit_procedure_invocation: ($) => seq($.procedure_name, '(', optional(seq($.expression, repeat(seq(',', $.expression)))), ')'),
       implicit_procedure_invocation: ($) => $.procedure_name,
       procedure_result_field: ($) => $.symbolic_name,
@@ -164,7 +178,7 @@ module.exports = grammar({
       symbolic_name: ($) => prec.left(choice($.unescaped_symbolic_name, $.escaped_symbolic_name, word('count'), word('any'), word('none'), word('single'))),
       unescaped_symbolic_name: ($) => (/(\p{ID_Start}|\p{Pc})(\p{ID_Continue}|\p{Sc})*/u),
       escaped_symbolic_name: () => repeat1(/`[^`]*`/),
-      comment: ($) => choice(seq('/*', repeat(choice(/[^\*]/, /\*[^\/]/)), '*/'), seq('//', /.*/, '\n')),
+      comment: ($) => token(choice(seq('/*', repeat(choice(/[^*]/, /\*+[^*\/]/)), /\*+\//), seq('//', /[^\n]*/))),
       left_arrow_head: () => choice('<', '\u{27e8}', '\u{3008}', '\u{fe64}', '\u{ff1c}'),
       right_arrow_head: () => choice('>', '\u{27e9}', '\u{3009}', '\u{fe65}', '\u{ff1e}'),
       dash: () => choice('-', '\u{00ad}', '\u{2010}', '\u{2011}', '\u{2012}', '\u{2013}', '\u{2014}', '\u{2015}', '\u{2212}', '\u{fe58}', '\u{fe63}', '\u{ff0d}'),
