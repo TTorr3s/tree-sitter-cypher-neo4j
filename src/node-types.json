@@ -105,6 +105,25 @@
     "fields": {}
   },
   {
+    "type": "call_subquery",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "regular_query",
+          "named": true
+        },
+        {
+          "type": "subquery_in_transactions",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "case_alternatives",
     "named": true,
     "fields": {},
@@ -1936,6 +1955,21 @@
     }
   },
   {
+    "type": "subquery_in_transactions",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "symbolic_name",
     "named": true,
     "fields": {},
@@ -2011,6 +2045,10 @@
       "multiple": false,
       "required": true,
       "types": [
+        {
+          "type": "call_subquery",
+          "named": true
+        },
         {
           "type": "create",
           "named": true
@@ -2679,6 +2717,14 @@
   },
   {
     "type": "return",
+    "named": false
+  },
+  {
+    "type": "row",
+    "named": false
+  },
+  {
+    "type": "rows",
     "named": false
   },
   {

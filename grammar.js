@@ -15,7 +15,7 @@ module.exports = grammar({
       single_query: ($) => choice($.single_part_query, $.multi_part_query),
       single_part_query: ($) => choice(seq(repeat($.reading_clause), $.return), seq(repeat($.reading_clause), repeat1($.updating_clause), optional($.return))),
       multi_part_query: ($) => seq(repeat1(seq(repeat($.reading_clause), repeat($.updating_clause), $.with)), $.single_part_query),
-      updating_clause: ($) => choice($.create, $.merge, $.delete, $.set, $.remove, $.foreach),
+      updating_clause: ($) => choice($.create, $.merge, $.delete, $.set, $.remove, $.foreach, $.call_subquery),
       reading_clause: ($) => choice($.match, $.unwind, $.in_query_call, $.load_csv),
       load_csv: ($) => seq(word('load'), word('csv'), optional(seq(word('with'), word('headers'))), word('from'), $.expression, word('as'), $.variable, optional(seq(word('fieldterminator'), $.string_literal))),
       match: ($) => seq(optional(word('optional')), word('match'), $.pattern, repeat($.hint), optional($.where)),
@@ -35,6 +35,8 @@ module.exports = grammar({
       remove_item: ($) => choice(seq($.variable, $.node_labels), $.property_expression),
       in_query_call: ($) => seq(word('call'), $.explicit_procedure_invocation, optional(seq(word('yield'), $.yield_items))),
       standalone_call: ($) => seq(word('call'), choice($.explicit_procedure_invocation, $.implicit_procedure_invocation), optional(seq(word('yield'), $.yield_items))),
+      call_subquery: ($) => seq(word('call'), '{', $.regular_query, '}', optional($.subquery_in_transactions)),
+      subquery_in_transactions: ($) => seq(word('in'), word('transactions'), optional(seq(word('of'), $.expression, choice(word('rows'), word('row'))))),
       show_command: ($) => seq(word('show'), $._show_entity, optional($.show_tail)),
       _show_entity: ($) => choice(
         seq(repeat($._show_modifier), $._show_object, optional($._executable)),

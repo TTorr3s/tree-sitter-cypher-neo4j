@@ -596,3 +596,309 @@ CREATE (n:Person) RETURN n
                         (variable
                           (symbolic_name
                             (unescaped_symbolic_name)))))))))))))))
+
+==================
+CALL subquery returning rows
+==================
+
+CALL { MATCH (p:Person) RETURN p } RETURN count(*)
+
+---
+
+(cypher
+  (statement
+    (query
+      (regular_query
+        (single_query
+          (single_part_query
+            (updating_clause
+              (call_subquery
+                (regular_query
+                  (single_query
+                    (single_part_query
+                      (reading_clause
+                        (match
+                          (pattern
+                            (pattern_part
+                              (anonymous_pattern_part
+                                (pattern_element
+                                  (node_pattern
+                                    (variable
+                                      (symbolic_name
+                                        (unescaped_symbolic_name)))
+                                    (node_labels
+                                      (node_label
+                                        (label_name
+                                          (schema_name
+                                            (symbolic_name
+                                              (unescaped_symbolic_name)))))))))))))
+                      (return
+                        (projection_body
+                          (projection_items
+                            (projection_item
+                              (expression
+                                (atom
+                                  (variable
+                                    (symbolic_name
+                                      (unescaped_symbolic_name))))))))))))))
+            (return
+              (projection_body
+                (projection_items
+                  (projection_item
+                    (expression
+                      (atom))))))))))))
+
+==================
+CALL subquery importing with WITH
+==================
+
+MATCH (n) CALL { WITH n MATCH (n)-[:KNOWS]->(f) RETURN f } RETURN n, f
+
+---
+
+(cypher
+  (statement
+    (query
+      (regular_query
+        (single_query
+          (single_part_query
+            (reading_clause
+              (match
+                (pattern
+                  (pattern_part
+                    (anonymous_pattern_part
+                      (pattern_element
+                        (node_pattern
+                          (variable
+                            (symbolic_name
+                              (unescaped_symbolic_name))))))))))
+            (updating_clause
+              (call_subquery
+                (regular_query
+                  (single_query
+                    (multi_part_query
+                      (with
+                        (projection_body
+                          (projection_items
+                            (projection_item
+                              (expression
+                                (atom
+                                  (variable
+                                    (symbolic_name
+                                      (unescaped_symbolic_name)))))))))
+                      (single_part_query
+                        (reading_clause
+                          (match
+                            (pattern
+                              (pattern_part
+                                (anonymous_pattern_part
+                                  (pattern_element
+                                    (node_pattern
+                                      (variable
+                                        (symbolic_name
+                                          (unescaped_symbolic_name))))
+                                    (pattern_element_chain
+                                      (relationship_pattern
+                                        (dash)
+                                        (relationship_detail
+                                          (relationship_types
+                                            (rel_type_name
+                                              (schema_name
+                                                (symbolic_name
+                                                  (unescaped_symbolic_name))))))
+                                        (dash)
+                                        (right_arrow_head))
+                                      (node_pattern
+                                        (variable
+                                          (symbolic_name
+                                            (unescaped_symbolic_name)))))))))))
+                        (return
+                          (projection_body
+                            (projection_items
+                              (projection_item
+                                (expression
+                                  (atom
+                                    (variable
+                                      (symbolic_name
+                                        (unescaped_symbolic_name)))))))))))))))
+            (return
+              (projection_body
+                (projection_items
+                  (projection_item
+                    (expression
+                      (atom
+                        (variable
+                          (symbolic_name
+                            (unescaped_symbolic_name))))))
+                  (projection_item
+                    (expression
+                      (atom
+                        (variable
+                          (symbolic_name
+                            (unescaped_symbolic_name)))))))))))))))
+
+==================
+CALL subquery IN TRANSACTIONS
+==================
+
+LOAD CSV FROM 'file:///x.csv' AS row CALL { WITH row CREATE (:Item {id: row[0]}) } IN TRANSACTIONS OF 500 ROWS
+
+---
+
+(cypher
+  (statement
+    (query
+      (regular_query
+        (single_query
+          (single_part_query
+            (reading_clause
+              (load_csv
+                (expression
+                  (atom
+                    (literal
+                      (string_literal))))
+                (variable
+                  (symbolic_name
+                    (unescaped_symbolic_name)))))
+            (updating_clause
+              (call_subquery
+                (regular_query
+                  (single_query
+                    (multi_part_query
+                      (with
+                        (projection_body
+                          (projection_items
+                            (projection_item
+                              (expression
+                                (atom
+                                  (variable
+                                    (symbolic_name
+                                      (unescaped_symbolic_name)))))))))
+                      (single_part_query
+                        (updating_clause
+                          (create
+                            (pattern
+                              (pattern_part
+                                (anonymous_pattern_part
+                                  (pattern_element
+                                    (node_pattern
+                                      (node_labels
+                                        (node_label
+                                          (label_name
+                                            (schema_name
+                                              (symbolic_name
+                                                (unescaped_symbolic_name))))))
+                                      (properties
+                                        (map_literal
+                                          (property_key_name
+                                            (schema_name
+                                              (symbolic_name
+                                                (unescaped_symbolic_name))))
+                                          (expression
+                                            (list_operator_expression
+                                              (expression
+                                                (atom
+                                                  (variable
+                                                    (symbolic_name
+                                                      (unescaped_symbolic_name)))))
+                                              (expression
+                                                (atom
+                                                  (literal
+                                                    (number_literal
+                                                      (integer_literal
+                                                        (decimal_integer)))))))))))))))))))))
+                (subquery_in_transactions
+                  (expression
+                    (atom
+                      (literal
+                        (number_literal
+                          (integer_literal
+                            (decimal_integer)))))))))))))))
+
+==================
+CALL subquery with UNION
+==================
+
+CALL { MATCH (a:A) RETURN a AS x UNION MATCH (b:B) RETURN b AS x } RETURN x
+
+---
+
+(cypher
+  (statement
+    (query
+      (regular_query
+        (single_query
+          (single_part_query
+            (updating_clause
+              (call_subquery
+                (regular_query
+                  (single_query
+                    (single_part_query
+                      (reading_clause
+                        (match
+                          (pattern
+                            (pattern_part
+                              (anonymous_pattern_part
+                                (pattern_element
+                                  (node_pattern
+                                    (variable
+                                      (symbolic_name
+                                        (unescaped_symbolic_name)))
+                                    (node_labels
+                                      (node_label
+                                        (label_name
+                                          (schema_name
+                                            (symbolic_name
+                                              (unescaped_symbolic_name)))))))))))))
+                      (return
+                        (projection_body
+                          (projection_items
+                            (projection_item
+                              (expression
+                                (atom
+                                  (variable
+                                    (symbolic_name
+                                      (unescaped_symbolic_name)))))
+                              (variable
+                                (symbolic_name
+                                  (unescaped_symbolic_name)))))))))
+                  (union
+                    (single_query
+                      (single_part_query
+                        (reading_clause
+                          (match
+                            (pattern
+                              (pattern_part
+                                (anonymous_pattern_part
+                                  (pattern_element
+                                    (node_pattern
+                                      (variable
+                                        (symbolic_name
+                                          (unescaped_symbolic_name)))
+                                      (node_labels
+                                        (node_label
+                                          (label_name
+                                            (schema_name
+                                              (symbolic_name
+                                                (unescaped_symbolic_name)))))))))))))
+                        (return
+                          (projection_body
+                            (projection_items
+                              (projection_item
+                                (expression
+                                  (atom
+                                    (variable
+                                      (symbolic_name
+                                        (unescaped_symbolic_name)))))
+                                (variable
+                                  (symbolic_name
+                                    (unescaped_symbolic_name)))))))))))))
+            (return
+              (projection_body
+                (projection_items
+                  (projection_item
+                    (expression
+                      (atom
+                        (variable
+                          (symbolic_name
+                            (unescaped_symbolic_name)))))))))))))))
