@@ -40,6 +40,10 @@
         {
           "type": "pattern_element",
           "named": true
+        },
+        {
+          "type": "shortest_path_pattern",
+          "named": true
         }
       ]
     }
@@ -61,6 +65,14 @@
           "named": true
         },
         {
+          "type": "extract_function",
+          "named": true
+        },
+        {
+          "type": "filter_function",
+          "named": true
+        },
+        {
           "type": "function_invocation",
           "named": true
         },
@@ -70,6 +82,10 @@
         },
         {
           "type": "literal",
+          "named": true
+        },
+        {
+          "type": "map_projection",
           "named": true
         },
         {
@@ -90,6 +106,14 @@
         },
         {
           "type": "quantifier",
+          "named": true
+        },
+        {
+          "type": "reduce_expression",
+          "named": true
+        },
+        {
+          "type": "shortest_path_pattern",
           "named": true
         },
         {
@@ -362,6 +386,10 @@
       "required": true,
       "types": [
         {
+          "type": "expression",
+          "named": true
+        },
+        {
           "type": "pattern",
           "named": true
         },
@@ -474,6 +502,25 @@
     }
   },
   {
+    "type": "extract_function",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "filter_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "filter_expression",
     "named": true,
     "fields": {},
@@ -487,6 +534,21 @@
         },
         {
           "type": "where",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "filter_function",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "filter_expression",
           "named": true
         }
       ]
@@ -823,6 +885,56 @@
         },
         {
           "type": "property_key_name",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "map_projection",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "map_projection_element",
+          "named": true
+        },
+        {
+          "type": "variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "map_projection_element",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "all_properties_selector",
+          "named": true
+        },
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "property_key_name",
+          "named": true
+        },
+        {
+          "type": "property_lookup",
+          "named": true
+        },
+        {
+          "type": "variable",
           "named": true
         }
       ]
@@ -1477,6 +1589,29 @@
     }
   },
   {
+    "type": "reduce_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "id_in_coll",
+          "named": true
+        },
+        {
+          "type": "variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "regular_query",
     "named": true,
     "fields": {},
@@ -1744,6 +1879,21 @@
         },
         {
           "type": "variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "shortest_path_pattern",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "pattern_element",
           "named": true
         }
       ]
@@ -2364,6 +2514,14 @@
     "named": false
   },
   {
+    "type": "all_properties_selector",
+    "named": true
+  },
+  {
+    "type": "allshortestpaths",
+    "named": false
+  },
+  {
     "type": "and",
     "named": false
   },
@@ -2696,6 +2854,10 @@
     "named": false
   },
   {
+    "type": "reduce",
+    "named": false
+  },
+  {
     "type": "regular_decimal_real",
     "named": true
   },
@@ -2741,6 +2903,10 @@
   },
   {
     "type": "set",
+    "named": false
+  },
+  {
+    "type": "shortestpath",
     "named": false
   },
   {

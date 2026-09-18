@@ -902,3 +902,434 @@ CALL { MATCH (a:A) RETURN a AS x UNION MATCH (b:B) RETURN b AS x } RETURN x
                         (variable
                           (symbolic_name
                             (unescaped_symbolic_name)))))))))))))))
+
+==================
+Map projection
+==================
+
+MATCH (n:Person) RETURN n {.name, .age, tag: 'x', .*}
+
+---
+
+(cypher
+  (statement
+    (query
+      (regular_query
+        (single_query
+          (single_part_query
+            (reading_clause
+              (match
+                (pattern
+                  (pattern_part
+                    (anonymous_pattern_part
+                      (pattern_element
+                        (node_pattern
+                          (variable
+                            (symbolic_name
+                              (unescaped_symbolic_name)))
+                          (node_labels
+                            (node_label
+                              (label_name
+                                (schema_name
+                                  (symbolic_name
+                                    (unescaped_symbolic_name)))))))))))))
+            (return
+              (projection_body
+                (projection_items
+                  (projection_item
+                    (expression
+                      (atom
+                        (map_projection
+                          (variable
+                            (symbolic_name
+                              (unescaped_symbolic_name)))
+                          (map_projection_element
+                            (property_lookup
+                              (property_key_name
+                                (schema_name
+                                  (symbolic_name
+                                    (unescaped_symbolic_name))))))
+                          (map_projection_element
+                            (property_lookup
+                              (property_key_name
+                                (schema_name
+                                  (symbolic_name
+                                    (unescaped_symbolic_name))))))
+                          (map_projection_element
+                            (property_key_name
+                              (schema_name
+                                (symbolic_name
+                                  (unescaped_symbolic_name))))
+                            (expression
+                              (atom
+                                (literal
+                                  (string_literal)))))
+                          (map_projection_element
+                            (all_properties_selector)))))))))))))))
+
+==================
+reduce function
+==================
+
+RETURN reduce(s = 0, x IN [1, 2, 3] | s + x) AS total
+
+---
+
+(cypher
+  (statement
+    (query
+      (regular_query
+        (single_query
+          (single_part_query
+            (return
+              (projection_body
+                (projection_items
+                  (projection_item
+                    (expression
+                      (atom
+                        (reduce_expression
+                          (variable
+                            (symbolic_name
+                              (unescaped_symbolic_name)))
+                          (expression
+                            (atom
+                              (literal
+                                (number_literal
+                                  (integer_literal
+                                    (decimal_integer))))))
+                          (id_in_coll
+                            (variable
+                              (symbolic_name
+                                (unescaped_symbolic_name)))
+                            (expression
+                              (atom
+                                (literal
+                                  (list_literal
+                                    (expression
+                                      (atom
+                                        (literal
+                                          (number_literal
+                                            (integer_literal
+                                              (decimal_integer))))))
+                                    (expression
+                                      (atom
+                                        (literal
+                                          (number_literal
+                                            (integer_literal
+                                              (decimal_integer))))))
+                                    (expression
+                                      (atom
+                                        (literal
+                                          (number_literal
+                                            (integer_literal
+                                              (decimal_integer)))))))))))
+                          (expression
+                            (additive_expression
+                              (expression
+                                (atom
+                                  (variable
+                                    (symbolic_name
+                                      (unescaped_symbolic_name)))))
+                              (expression
+                                (atom
+                                  (variable
+                                    (symbolic_name
+                                      (unescaped_symbolic_name))))))))))
+                    (variable
+                      (symbolic_name
+                        (unescaped_symbolic_name)))))))))))))
+
+==================
+shortestPath in MATCH
+==================
+
+MATCH p = shortestPath((a:A)-[:R*]-(b:B)) RETURN p
+
+---
+
+(cypher
+  (statement
+    (query
+      (regular_query
+        (single_query
+          (single_part_query
+            (reading_clause
+              (match
+                (pattern
+                  (pattern_part
+                    (variable
+                      (symbolic_name
+                        (unescaped_symbolic_name)))
+                    (anonymous_pattern_part
+                      (shortest_path_pattern
+                        (pattern_element
+                          (node_pattern
+                            (variable
+                              (symbolic_name
+                                (unescaped_symbolic_name)))
+                            (node_labels
+                              (node_label
+                                (label_name
+                                  (schema_name
+                                    (symbolic_name
+                                      (unescaped_symbolic_name)))))))
+                          (pattern_element_chain
+                            (relationship_pattern
+                              (dash)
+                              (relationship_detail
+                                (relationship_types
+                                  (rel_type_name
+                                    (schema_name
+                                      (symbolic_name
+                                        (unescaped_symbolic_name)))))
+                                (range_literal))
+                              (dash))
+                            (node_pattern
+                              (variable
+                                (symbolic_name
+                                  (unescaped_symbolic_name)))
+                              (node_labels
+                                (node_label
+                                  (label_name
+                                    (schema_name
+                                      (symbolic_name
+                                        (unescaped_symbolic_name)))))))))))))))
+            (return
+              (projection_body
+                (projection_items
+                  (projection_item
+                    (expression
+                      (atom
+                        (variable
+                          (symbolic_name
+                            (unescaped_symbolic_name)))))))))))))))
+
+==================
+allShortestPaths in expression
+==================
+
+MATCH (a), (b) RETURN allShortestPaths((a)-[*..5]-(b)) AS ps
+
+---
+
+(cypher
+  (statement
+    (query
+      (regular_query
+        (single_query
+          (single_part_query
+            (reading_clause
+              (match
+                (pattern
+                  (pattern_part
+                    (anonymous_pattern_part
+                      (pattern_element
+                        (node_pattern
+                          (variable
+                            (symbolic_name
+                              (unescaped_symbolic_name)))))))
+                  (pattern_part
+                    (anonymous_pattern_part
+                      (pattern_element
+                        (node_pattern
+                          (variable
+                            (symbolic_name
+                              (unescaped_symbolic_name))))))))))
+            (return
+              (projection_body
+                (projection_items
+                  (projection_item
+                    (expression
+                      (atom
+                        (shortest_path_pattern
+                          (pattern_element
+                            (node_pattern
+                              (variable
+                                (symbolic_name
+                                  (unescaped_symbolic_name))))
+                            (pattern_element_chain
+                              (relationship_pattern
+                                (dash)
+                                (relationship_detail
+                                  (range_literal
+                                    (integer_literal
+                                      (decimal_integer))))
+                                (dash))
+                              (node_pattern
+                                (variable
+                                  (symbolic_name
+                                    (unescaped_symbolic_name)))))))))
+                    (variable
+                      (symbolic_name
+                        (unescaped_symbolic_name)))))))))))))
+
+==================
+exists predicate function
+==================
+
+MATCH (n) WHERE exists(n.email) RETURN n
+
+---
+
+(cypher
+  (statement
+    (query
+      (regular_query
+        (single_query
+          (single_part_query
+            (reading_clause
+              (match
+                (pattern
+                  (pattern_part
+                    (anonymous_pattern_part
+                      (pattern_element
+                        (node_pattern
+                          (variable
+                            (symbolic_name
+                              (unescaped_symbolic_name))))))))
+                (where
+                  (expression
+                    (atom
+                      (existential_subquery
+                        (expression
+                          (property_or_labels_expression
+                            (expression
+                              (atom
+                                (variable
+                                  (symbolic_name
+                                    (unescaped_symbolic_name)))))
+                            (property_lookup
+                              (property_key_name
+                                (schema_name
+                                  (symbolic_name
+                                    (unescaped_symbolic_name)))))))))))))
+            (return
+              (projection_body
+                (projection_items
+                  (projection_item
+                    (expression
+                      (atom
+                        (variable
+                          (symbolic_name
+                            (unescaped_symbolic_name)))))))))))))))
+
+==================
+extract and filter list functions
+==================
+
+RETURN extract(x IN [1, 2, 3] WHERE x > 1 | x * 2) AS xs, filter(y IN [4, 5] WHERE y > 4) AS ys
+
+---
+
+(cypher
+  (statement
+    (query
+      (regular_query
+        (single_query
+          (single_part_query
+            (return
+              (projection_body
+                (projection_items
+                  (projection_item
+                    (expression
+                      (atom
+                        (extract_function
+                          (filter_expression
+                            (id_in_coll
+                              (variable
+                                (symbolic_name
+                                  (unescaped_symbolic_name)))
+                              (expression
+                                (atom
+                                  (literal
+                                    (list_literal
+                                      (expression
+                                        (atom
+                                          (literal
+                                            (number_literal
+                                              (integer_literal
+                                                (decimal_integer))))))
+                                      (expression
+                                        (atom
+                                          (literal
+                                            (number_literal
+                                              (integer_literal
+                                                (decimal_integer))))))
+                                      (expression
+                                        (atom
+                                          (literal
+                                            (number_literal
+                                              (integer_literal
+                                                (decimal_integer)))))))))))
+                            (where
+                              (expression
+                                (comparison_expression
+                                  (expression
+                                    (atom
+                                      (variable
+                                        (symbolic_name
+                                          (unescaped_symbolic_name)))))
+                                  (expression
+                                    (atom
+                                      (literal
+                                        (number_literal
+                                          (integer_literal
+                                            (decimal_integer))))))))))
+                          (expression
+                            (multiplicative_expression
+                              (expression
+                                (atom
+                                  (variable
+                                    (symbolic_name
+                                      (unescaped_symbolic_name)))))
+                              (expression
+                                (atom
+                                  (literal
+                                    (number_literal
+                                      (integer_literal
+                                        (decimal_integer)))))))))))
+                    (variable
+                      (symbolic_name
+                        (unescaped_symbolic_name))))
+                  (projection_item
+                    (expression
+                      (atom
+                        (filter_function
+                          (filter_expression
+                            (id_in_coll
+                              (variable
+                                (symbolic_name
+                                  (unescaped_symbolic_name)))
+                              (expression
+                                (atom
+                                  (literal
+                                    (list_literal
+                                      (expression
+                                        (atom
+                                          (literal
+                                            (number_literal
+                                              (integer_literal
+                                                (decimal_integer))))))
+                                      (expression
+                                        (atom
+                                          (literal
+                                            (number_literal
+                                              (integer_literal
+                                                (decimal_integer)))))))))))
+                            (where
+                              (expression
+                                (comparison_expression
+                                  (expression
+                                    (atom
+                                      (variable
+                                        (symbolic_name
+                                          (unescaped_symbolic_name)))))
+                                  (expression
+                                    (atom
+                                      (literal
+                                        (number_literal
+                                          (integer_literal
+                                            (decimal_integer)))))))))))))
+                    (variable
+                      (symbolic_name
+                        (unescaped_symbolic_name)))))))))))))
