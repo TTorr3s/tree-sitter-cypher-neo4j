@@ -41,3 +41,6 @@ dist/
 
 local
 Cargo.lock
+
+# npm lockfile (library: pin toolchain per-consumer, like Cargo.lock)
+package-lock.json
