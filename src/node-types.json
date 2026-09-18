@@ -182,11 +182,6 @@
     }
   },
   {
-    "type": "comment",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "comparison_expression",
     "named": true,
     "fields": {},
@@ -281,7 +276,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "statement",
@@ -391,6 +386,10 @@
         },
         {
           "type": "pattern",
+          "named": true
+        },
+        {
+          "type": "reading_clause",
           "named": true
         },
         {
@@ -605,11 +604,11 @@
       "required": true,
       "types": [
         {
-          "type": "symbolic_name",
+          "type": "property_lookup",
           "named": true
         },
         {
-          "type": "variable",
+          "type": "symbolic_name",
           "named": true
         }
       ]
@@ -1570,6 +1569,10 @@
       "required": true,
       "types": [
         {
+          "type": "call_subquery",
+          "named": true
+        },
+        {
           "type": "in_query_call",
           "named": true
         },
@@ -2402,10 +2405,6 @@
     }
   },
   {
-    "type": "\n",
-    "named": false
-  },
-  {
     "type": "\"",
     "named": false
   },
@@ -2431,10 +2430,6 @@
   },
   {
     "type": "*",
-    "named": false
-  },
-  {
-    "type": "*/",
     "named": false
   },
   {
@@ -2466,14 +2461,6 @@
     "named": false
   },
   {
-    "type": "/*",
-    "named": false
-  },
-  {
-    "type": "//",
-    "named": false
-  },
-  {
     "type": "0",
     "named": false
   },
@@ -2499,6 +2486,10 @@
   },
   {
     "type": "=",
+    "named": false
+  },
+  {
+    "type": "=~",
     "named": false
   },
   {
@@ -2584,6 +2575,10 @@
   {
     "type": "case",
     "named": false
+  },
+  {
+    "type": "comment",
+    "named": true
   },
   {
     "type": "constraint",
